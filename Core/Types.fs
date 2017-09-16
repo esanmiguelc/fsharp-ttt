@@ -2,5 +2,5 @@ namespace Core
 
 module Types = 
   type Result<'TOk, 'TError> =
-  | Ok of value : 'a
-  | Error of error : 'b
+  | Ok of value : 'TOk
+  | Error of error : 'TError

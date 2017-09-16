@@ -1,5 +1,7 @@
 namespace Core
 
+open System
+
 module Board =
     type Cell = { value:Option<string> }
     type Board = { cells:list<Cell> }
@@ -7,16 +9,13 @@ module Board =
     | InvalidLocation
     | PositionTaken
 
-
-
-    let emptyBoard =  
+    let emptyBoard : Board =
       {cells=[{value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}]}
 
-    val fillBoard : Board -> string -> int -> Result<Board, BoardError>
-    let fillBoard board mark position =
+    let fillBoard (board : Board) (mark : string) (position : int) : Result<Board, BoardError> =
       try
-        List.item board position
+        let item = List.item position board.cells
+        Ok {cells=[{value = Some "X"}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}]}
       with
-        | ArgumentException -> Error InvalidLocation 
-  
-  
+      | :? ArgumentException -> Error InvalidLocation
+
