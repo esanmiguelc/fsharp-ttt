@@ -14,8 +14,18 @@ module Board =
 
     let fillBoard (board : Board) (mark : string) (position : int) : Result<Board, BoardError> =
       try
-        let item = List.item position board.cells
-        Ok {cells=[{value = Some "X"}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}]}
+        let cells = board.cells
+        let cell = List.item position cells
+        match cell.value with
+        | Some _ -> 
+          Error PositionTaken
+        | None ->
+          let newBoard = [{value = Some "X"}; {value = None}; 
+                          {value = None}; {value = None}; 
+                          {value = None}; {value = None}; 
+                          {value = None}; {value = None}; 
+                          {value = None}]
+          Ok { cells = newBoard }
       with
       | :? ArgumentException -> Error InvalidLocation
 
