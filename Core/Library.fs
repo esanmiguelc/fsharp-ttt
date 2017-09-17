@@ -12,25 +12,25 @@ module Board =
     | InvalidLocation
     | PositionTaken
 
-    let public emptyBoard : Board = 
-      { cells = [ for pos in 0 .. 9 -> {value = None; position = pos } ] }
-
     let private getMark (board: Board) : PlayerMark =
-      List.filter (fun cell -> cell.value = None) board.cells 
-      |> List.length 
-      |> (fun count -> count % 2 = 0) 
+      List.filter (fun cell -> cell.value = None) board.cells
+      |> List.length
+      |> (fun count -> count % 2 = 0)
       |> (fun value -> if value then X else O)
+
+    let public newBoard : Board =
+      { cells = [ for pos in 0 .. 9 -> {value = None; position = pos } ] }
 
     let public fillBoard (board : Board) (position : int) : Result<Board, BoardError> =
       try
         let cells = board.cells
         let cell = List.find (fun i -> i.position = position) cells
         match cell.value with
-        | Some _ -> 
+        | Some _ ->
           Error PositionTaken
         | None ->
-          let updateCell = List.filter (fun cell -> cell.position <> position) >> 
-                           List.append  [{ value = Some (getMark board); position = position }] >> 
+          let updateCell = List.filter (fun cell -> cell.position <> position) >>
+                           List.append  [{ value = Some (getMark board); position = position }] >>
                            List.sortBy (fun c -> c.position)
           Ok { cells = updateCell board.cells }
       with
