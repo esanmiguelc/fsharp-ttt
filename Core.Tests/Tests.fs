@@ -22,7 +22,7 @@ let ``it returns an empty board`` () =
 
 [<Fact>]
 let ``it fills the board with a marker`` () =
-    let board = {cells=[{value = Some "X"; position = 0}; 
+    let board = {cells=[{value = Some X; position = 0}; 
                         {value = None; position = 1}; 
                         {value = None; position = 2}; 
                         {value = None; position = 3}; 
@@ -32,11 +32,11 @@ let ``it fills the board with a marker`` () =
                         {value = None; position = 7}; 
                         {value = None; position = 8}; 
                         {value = None; position = 9}]}
-    Assert.Equal(Ok board, fillBoard emptyBoard "X" 0) 
+    Assert.Equal(Ok board, fillBoard emptyBoard 0) 
 
 [<Fact>]
 let ``it fills the board with a second marker`` () =
-    let board = {cells=[{value = Some "X"; position = 0}; 
+    let board = {cells=[{value = Some X; position = 0}; 
                         {value = None; position = 1}; 
                         {value = None; position = 2}; 
                         {value = None; position = 3}; 
@@ -47,8 +47,8 @@ let ``it fills the board with a second marker`` () =
                         {value = None; position = 8}; 
                         {value = None; position = 9}]}
 
-    let updatedBoard = {cells=[{value = Some "X"; position = 0}; 
-                                {value = Some "O"; position = 1}; 
+    let updatedBoard = {cells=[{value = Some X; position = 0}; 
+                                {value = Some O; position = 1}; 
                                 {value = None; position = 2}; 
                                 {value = None; position = 3}; 
                                 {value = None; position = 4}; 
@@ -57,15 +57,17 @@ let ``it fills the board with a second marker`` () =
                                 {value = None; position = 7}; 
                                 {value = None; position = 8}; 
                                 {value = None; position = 9}]}
-    Assert.Equal(Ok updatedBoard, fillBoard board "O" 1) 
+    Assert.Equal(Ok updatedBoard, fillBoard board 1) 
+
 
 [<Fact>]
 let ``it returns position taken when the position selected is not a valid one`` () =
-    Assert.Equal(Error InvalidLocation, fillBoard emptyBoard "X" 10) 
+    Assert.Equal(Error InvalidLocation, fillBoard emptyBoard 10) 
+
 
 [<Fact>]
 let ``it returns position taken when the position selected is not available`` () =
-    let board = {cells=[{value = Some "X"; position = 0}; 
+    let board = {cells=[{value = Some X; position = 0}; 
                         {value = None; position = 1}; 
                         {value = None; position = 2}; 
                         {value = None; position = 3}; 
@@ -75,4 +77,4 @@ let ``it returns position taken when the position selected is not available`` ()
                         {value = None; position = 7}; 
                         {value = None; position = 8}; 
                         {value = None; position = 9}]}
-    Assert.Equal(Error PositionTaken, fillBoard board "X" 0) 
+    Assert.Equal(Error PositionTaken, fillBoard board 0) 
