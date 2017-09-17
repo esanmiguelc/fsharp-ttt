@@ -3,29 +3,27 @@ namespace Core
 open System
 
 module Board =
-    type Cell = { value:Option<string> }
+    type Cell = { value:Option<string>; position:int }
     type Board = { cells:list<Cell> }
     type BoardError =
     | InvalidLocation
     | PositionTaken
 
-    let emptyBoard : Board =
-      {cells=[{value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}; {value = None}]}
+    let public emptyBoard : Board = 
+      { cells = [ for pos in 0 .. 9 -> {value = None; position = pos } ] }
 
-    let fillBoard (board : Board) (mark : string) (position : int) : Result<Board, BoardError> =
+    let public fillBoard (board : Board) (mark : string) (position : int) : Result<Board, BoardError> =
       try
         let cells = board.cells
-        let cell = List.item position cells
+        let cell = List.find (fun i -> i.position = position) cells
         match cell.value with
         | Some _ -> 
           Error PositionTaken
         | None ->
-          let newBoard = [{value = Some "X"}; {value = None}; 
-                          {value = None}; {value = None}; 
-                          {value = None}; {value = None}; 
-                          {value = None}; {value = None}; 
-                          {value = None}]
-          Ok { cells = newBoard }
+          let updateCell = List.filter (fun cell -> cell.position <> position) >> 
+                           List.append  [{ value = Some mark; position = position }] >> 
+                           List.sortBy (fun c -> c.position)
+          Ok { cells = updateCell board.cells }
       with
-      | :? ArgumentException -> Error InvalidLocation
+      | :? System.Collections.Generic.KeyNotFoundException -> Error InvalidLocation
 
